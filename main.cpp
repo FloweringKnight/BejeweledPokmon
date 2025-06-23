@@ -82,8 +82,6 @@ int main() {
                 isSwap = true;
                 click = 0;
             } else {
-                std::cout << x << " " << y << std::endl;
-                std::cout << x0 << " " << y0 << std::endl;
                 click = 1;
             }
         }
@@ -127,43 +125,39 @@ int main() {
         }
 
         if (isSwap && !isMoving) {
-            if (score == 0){
+            if (score == 0) {
                 swap(grid[y0][x0], grid[y][x]);
-                isSwap = false;
             }
+            isSwap = false;
         }
 
         if (!isMoving) {
-            // for (int i = 8; i > 1; i--) {
-            //     for (int j = 1; j <= 8; j++) {
-            //         if (grid[i][j].match != 0) {
-            //             for (int n = i; n >= 1; n--) {
-            //                 if (grid[n][j].match == 0) {
-            //                     swap(grid[n][j], grid[i][j]);
-            //                     break;
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
-            // for (int j = 1; j <= 8; j++) {
-            //     for (int i = 8, n = 0; i > 0; i--) {
-            //         if (grid[i][j].match != 0) {
-            //             grid[i][j].kind = RandomNum::range(0, 6);
-            //             grid[i][j].y = static_cast<float>(ts * n);
-            //             n += 1;
-            //             grid[i][j].match = 0;
-            //         }
-            //     }
-            // }
-            for (int i = 8; i > 0; i--) {
+            for (int i = 8; i > 1; i--) {
                 for (int j = 1; j <= 8; j++) {
                     if (grid[i][j].match != 0) {
-                        std::cout << grid[i][j].row << " "<< grid[i][j].col << std::endl;
+                        for (int n = i; n >= 1; n--) {
+                            if (grid[n][j].match == 0) {
+                                swap(grid[n][j], grid[i][j]);
+                                break;
+                            }
+                        }
                     }
                 }
             }
+            for (int j = 1; j <= 8; j++) {
+                for (int i = 8, n = 0; i > 0; i--) {
+                    if (grid[i][j].match != 0) {
+                        grid[i][j].kind = RandomNum::range(0, 6);
+                        grid[i][j].y = static_cast<float>(ts * n);
+                        n += 1;
+                        grid[i][j].match = 0;
+                    }
+                }
+            }
+
         }
+
+
 
         window.clear(sf::Color::White);
         for (int i = 1; i <= 8; i++) {
