@@ -6,9 +6,12 @@ int ts = 64; //  宝石宽高
 // sf::Vector2i offset(48.f,24.f);     //  调整元素与背景图格子的相对位置，我不打算用背景，故该变量无意义
 
 struct piece {
-    int col, row, kind, match;
+    int col, row, kind, match , alpha;
     float x, y;
-    piece() { match = 0; }
+    piece() {
+        match = 0;
+        alpha = 255;
+    }
 } grid[10][10];
 
 void swap(piece p1, piece p2) {
@@ -107,13 +110,26 @@ int main() {
             for (int j = 1; j <= 8; j++) {
                 auto &p = grid[i][j];
                 float dx, dy;
-                for (int k = 0; k < 2; k++) {
+                for (int k = 0; k < 4; k++) {
                     dx = p.x - static_cast<float>(p.col * ts);
                     dy = p.y - static_cast<float>(p.row * ts);
                     if (dx != 0.f) p.x -= dx / abs(dx);
                     if (dy != 0.f) p.y -= dy / abs(dy);
                 }
                 if (dx != 0.f || dy != 0.f) isMoving = true;
+            }
+        }
+
+        if (!isMoving) {
+            for (int i = 1; i <= 8; i++) {
+                for (int j = 1; j <= 8; j++) {
+                    if (grid[i][j].match != 0) {
+                        if (grid[i][j].alpha > 10) {
+                            grid[i][j].alpha -= 10;
+                            isMoving = true;
+                        }
+                    }
+                }
             }
         }
 
@@ -148,9 +164,10 @@ int main() {
                 for (int i = 8, n = 0; i > 0; i--) {
                     if (grid[i][j].match != 0) {
                         grid[i][j].kind = RandomNum::range(0, 6);
-                        grid[i][j].y = static_cast<float>(ts * n);
+                        grid[i][j].y = static_cast<float>(-ts * n);
                         n += 1;
                         grid[i][j].match = 0;
+                        grid[i][j].alpha = 255;
                     }
                 }
             }
@@ -165,30 +182,37 @@ int main() {
                 switch (auto piece = grid[i][j]; piece.kind) {
                     case 0:
                         bulbasaur.setPosition(sf::Vector2f(piece.x, piece.y));
+                        bulbasaur.setColor(sf::Color(255,255,255,piece.alpha));
                         window.draw(bulbasaur);
                         break;
                     case 1:
                         charmander.setPosition(sf::Vector2f(piece.x, piece.y));
+                        charmander.setColor(sf::Color(255,255,255,piece.alpha));
                         window.draw(charmander);
                         break;
                     case 2:
                         clefairy.setPosition(sf::Vector2f(piece.x, piece.y));
+                        clefairy.setColor(sf::Color(255,255,255,piece.alpha));
                         window.draw(clefairy);
                         break;
                     case 3:
                         eevee.setPosition(sf::Vector2f(piece.x, piece.y));
+                        eevee.setColor(sf::Color(255,255,255,piece.alpha));
                         window.draw(eevee);
                         break;
                     case 4:
                         jigglypuff.setPosition(sf::Vector2f(piece.x, piece.y));
+                        jigglypuff.setColor(sf::Color(255,255,255,piece.alpha));
                         window.draw(jigglypuff);
                         break;
                     case 5:
                         pikachu.setPosition(sf::Vector2f(piece.x, piece.y));
+                        pikachu.setColor(sf::Color(255,255,255,piece.alpha));
                         window.draw(pikachu);
                         break;
                     case 6:
                         squirtle.setPosition(sf::Vector2f(piece.x, piece.y));
+                        squirtle.setColor(sf::Color(255,255,255,piece.alpha));
                         window.draw(squirtle);
                         break;
                     default: ;
